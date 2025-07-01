@@ -1,0 +1,116 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Results PDF</title>
+    <style>
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 12px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .header h3 {
+            margin: 5px 0;
+            font-weight: normal;
+        }
+        .date {
+            text-align: right;
+            font-size: 10px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 8px 6px;
+            border: 1px solid #000;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 11px;
+        }
+        td {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="https://upload.wikimedia.org/wikipedia/tr/archive/4/45/20201018140654%21SivasCumhuriyet%C3%9CniLogo.png" alt="University Logo">
+    <h1>University Name</h1>
+    <h3>Final Results Report</h3>
+</div>
+
+<div class="date">
+    Date: {{ now|date:"d/m/Y" }}
+</div>
+
+<h3 style="text-align:center;">Course: {{ subject.subject_name }}</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Student Name</th>
+
+            {% for component in components %}
+                <th>{{ component.name }}</th>
+            {% endfor %}
+
+            <th>Final Grade</th>
+            <th>Grade Letter</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.student_id.admin.id }}</td>
+            <td>{{ result.student_id.admin.first_name }} {{ result.student_id.admin.last_name }}</td>
+
+            {% for component in components %}
+                <td>
+                    {% with score=result.studentcomponentresult_set.all|get_component_score:component.name %}
+                        {% if score %}
+                            {{ score|floatformat:2 }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    {% endwith %}
+                </td>
+            {% endfor %}
+
+            <td>{{ result.final_grade|floatformat:2 }}</td>
+            <td>{{ result.grade_letter|default:"-" }}</td>
+            <td>
+                {% if result.is_released %}
+                    Released
+                {% else %}
+                    Pending
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Edit Course | Course Number : {{ subject.id }}
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Edit Course</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form role="form" action="/edit_subject_save" method="post">
+                  {% csrf_token %}
+                <div class="card-body">
+
+                  <div class="form-group">
+                    <label>Course Number</label>
+                    <input type="number" class="form-control" name="subject_id" value="{{ subject.id }}" readonly> 
+                  </div>
+
+                  <div class="form-group">
+                    <label>Course Title</label>
+                    <input type="text" class="form-control" name="subject_name" value="{{ subject.subject_name }}">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Course Code Department (Prefix)</label>
+                    <input type="text" class="form-control" name="subject_code_dep" value="{{ subject.subject_code_dep }}">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Course Type</label>
+                    <input type="text" class="form-control" name="subject_description" value="{{ subject.subject_description }}">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Credit Hours</label>
+                    <input type="number" class="form-control" name="credit_hours" value="{{ subject.credit_hours }}">
+                  </div>
+                  
+                  <div class="form-group">
+                  <label>ECTS Credits</label>
+                  <input type="number" class="form-control" name="ects_credits" step="0.1" value="{{ subject.ects_credits }}">
+                </div>
+
+                  <div class="form-group">
+                    <label>Semester</label>
+                    <input type="number" class="form-control" name="semester" value="{{ subject.semester }}">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Faculty</label>
+                    <select class="form-control" name="course">
+                        {% for course in courses %}
+                          <option value="{{ course.id }}" {% if course.id == subject.course_id.id %} selected {% endif %}>{{ course.course_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Acadimician</label>
+                    <select class="form-control" name="staff">
+                        {% for staff in staffs %}
+                          <option value="{{ staff.id }}" {% if staff.id == subject.staff_id.id %} selected {% endif %}>{{ staff.first_name }} {{ staff.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Compulsory/Elective</label>
+                    <select class="form-control" name="subject_type">
+                        <option value="Compulsory" {% if subject.subject_type == "Compulsory" %} selected {% endif %}>Compulsory</option>
+                        <option value="Elective" {% if subject.subject_type == "Elective" %} selected {% endif %}>Elective</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Has Theory</label><br>
+                    <input type="checkbox" name="has_theory" {% if subject.has_theory %} checked {% endif %}> Yes
+                  </div>
+
+                  <div class="form-group">
+                    <label>Has Lab</label><br>
+                    <input type="checkbox" name="has_lab" {% if subject.has_lab %} checked {% endif %}> Yes
+                  </div>
+
+                  <div class="form-group">
+                      {% if messages %}
+                        {% for message in messages %}
+                          {% if message.tags == 'error' %}
+                            <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                          {% endif %}
+                          {% if message.tags == 'success' %}
+                            <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                  </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary btn-block">Save Lesson</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
+          </div>
+          </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}

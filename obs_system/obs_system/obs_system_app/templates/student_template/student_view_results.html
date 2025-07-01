@@ -1,0 +1,147 @@
+{% extends 'student_template/base_template.html' %}
+{% load custom_filters %}
+
+{% block page_title %}
+My Results
+{% endblock page_title %}
+
+{% block main_content %}
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="mb-3">
+        <a href="{% url 'student_export_results_pdf' %}" class="btn btn-danger">
+              Download PDF
+        </a>
+        <a href="{% url 'student_export_results_excel' %}" class="btn btn-success">
+              Download Excel
+        </a>
+        <button onclick="window.print()" class="btn btn-primary">
+             Print This Page
+        </button>
+    </div>
+
+    {% if results_with_components %}
+      <div class="card card-primary">
+        <div class="card-header">
+          <h3 class="card-title">My Results</h3>
+        </div>
+
+        <div class="card-body table-responsive p-0">
+          <table id="studentResultsTable" class="table table-bordered text-nowrap table-hover">
+            <thead class="text-center bg-dark text-white">
+              <tr>
+                <th>Course Code</th>
+                <th>Course Name</th>
+
+                {% for component in components %}
+                  <th>{{ component.name }} ({{ component.weight|floatformat:2 }}%)</th>
+                {% endfor %}
+
+                <th>Final Grade</th>
+                <th>Grade Letter</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody class="text-center">
+              {% for item in results_with_components %}
+              <tr>
+                <td>{{ item.result.subject_id.subject_code_dep }}{{ item.result.subject_id.id }}</td>
+                <td>{{ item.result.subject_id.subject_name }}</td>
+
+                {% for component in components %}
+                  <td>
+                    {% with score=item.components|get_component_score:component.name %}
+                      {% if score is not None %}
+                        {{ score|floatformat:2 }}
+                      {% else %}
+                        N/A
+                      {% endif %}
+                    {% endwith %}
+                  </td>
+                {% endfor %}
+
+                <td>
+                  {% if item.result.is_released %}
+                    {{ item.result.final_grade|floatformat:2 }}
+                  {% else %}
+                    <span class="badge badge-secondary">Pending</span>
+                  {% endif %}
+                </td>
+
+                <td>
+                  {% if item.result.is_released %}
+                    {{ item.result.grade_letter }}
+                  {% else %}
+                    <span class="badge badge-secondary">Pending</span>
+                  {% endif %}
+                </td>
+
+                <td>
+                  {% if item.result.is_released %}
+                    <span class="badge badge-success">Released</span>
+                  {% else %}
+                    <span class="badge badge-warning">Pending</span>
+                  {% endif %}
+                </td>
+
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    {% else %}
+      <div class="alert alert-info">No results available yet.</div>
+    {% endif %}
+
+  </div>
+</section>
+
+<script>
+  $(document).ready(function() {
+    $('#studentResultsTable').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+          { extend: 'copy', text: '📋 Copy' },
+          { extend: 'csv', text: '📄 CSV' },
+          { extend: 'excel', text: '📊 Excel' },
+          { extend: 'pdf', text: '📄 PDF' },
+          { extend: 'print', text: '🖨️ Print Table' }
+      ],
+      "pageLength": 10,
+      "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+      "order": [[ 0, "asc" ]],
+      "language": {
+        "search": "🔍 Search:",
+        "lengthMenu": "Display _MENU_ subjects per page",
+        "zeroRecords": "No matching subjects found",
+        "info": "Showing page _PAGE_ of _PAGES_",
+        "infoEmpty": "No subjects available",
+        "infoFiltered": "(filtered from _MAX_ total subjects)"
+      }
+    });
+  });
+</script>
+
+{% endblock main_content %}

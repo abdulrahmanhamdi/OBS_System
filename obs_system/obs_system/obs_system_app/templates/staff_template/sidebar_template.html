@@ -1,0 +1,172 @@
+{% load static %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <a href="{{ admin_home }}" class="brand-link {% if request.path == admin_home %} active {% endif %}">
+    <img src="{% static "dist/img/SivasCumhuriyetÜniLogo.png" %}" alt="SivasCumhuriyetÜniLogo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light">Cumhuriyet University</span>
+  </a>
+
+  <div class="sidebar">
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img src="{% static "dist/img/user2-160x160.jpg" %}" class="img-circle elevation-2" alt="User Image">
+      </div>
+      <div class="info">
+        <a href="{% url 'staff_profile' %}" class="d-block">{{ user.username }}</a>
+      </div>
+    </div>
+
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <!-- Home Page -->
+        <li class="nav-item">
+          {% url 'staff_home' as staff_home %}
+          <a href="{{ staff_home }}" class="nav-link {% if request.path == staff_home %} active {% endif %}">
+            <i class="nav-icon fas fa-home"></i>
+            <p>Home</p>
+          </a>
+        </li>
+
+        <!-- My Lessons -->
+        <li class="nav-item">
+          {% url 'staff_subjects' as staff_subjects %}
+          <a href="{{ staff_subjects }}" class="nav-link {% if request.path == staff_subjects %} active {% endif %}">
+            <i class="nav-icon fas fa-book-open"></i>
+            <p>My Lessons</p>
+          </a>
+        </li>
+
+        <!-- Review Subject Registrations -->
+        <li class="nav-item">
+          {% url 'advisor_pending_subjects' as advisor_pending_subjects %}
+          <a href="{{ advisor_pending_subjects }}" class="nav-link {% if request.path == advisor_pending_subjects %} active {% endif %}">
+            <i class="nav-icon fas fa-user-check"></i>
+            <p>Approve Lessons</p>
+          </a>
+        </li>
+
+        <!-- Assign Advisor to Students -->
+        <li class="nav-item">
+          {% url 'assign_advisor_to_students' as assign_advisor_to_students %}
+          <a href="{{ assign_advisor_to_students }}" class="nav-link {% if request.path == assign_advisor_to_students %} active {% endif %}">
+            <i class="nav-icon fas fa-user-plus"></i>
+            <p>Assign Advisor</p>
+          </a>
+        </li>
+
+
+        <li class="nav-item">
+        {% url 'manage_grade_components' as manage_grade_components %}
+        <a href="{{ manage_grade_components }}" class="nav-link {% if request.path == manage_grade_components %} active {% endif %}">
+          <i class="nav-icon fas fa-tasks"></i>
+          <p>Manage Grade Components</p>
+        </a>
+      </li>
+
+              <li class="nav-item">
+        {% url 'add_student_result_components' as add_student_result_components %}
+        <a href="{{ add_student_result_components }}" class="nav-link {% if request.path == add_student_result_components %} active {% endif %}">
+          <i class="nav-icon fas fa-clipboard-list"></i>
+          <p>Add Component Results</p>
+        </a>
+      </li>
+
+            <li class="nav-item">
+        {% url 'manage_release_results' as manage_release_results %}
+        <a href="{{ manage_release_results }}" class="nav-link {% if request.path == manage_release_results %} active {% endif %}">
+          <i class="nav-icon fas fa-upload"></i>
+          <p>Manage Release Results</p>
+        </a>
+      </li>
+      
+       <li class="nav-item">
+        {% url 'manage_subject_final_results' as manage_subject_final_results %}
+        <a href="{{ manage_subject_final_results }}" class="nav-link {% if request.path == manage_subject_final_results %} active {% endif %}">
+          <i class="nav-icon fas fa-star-half-alt"></i>
+          <p>Manage Final Grades</p>
+        </a>
+      </li>
+
+              <li class="nav-item">
+          <a href="{% url 'upload_subject_resource' %}" class="nav-link {% if request.path == '/upload_subject_resource/' %}active{% endif %}">
+            <i class="nav-icon fas fa-upload"></i>
+            <p>Upload Resources</p>
+          </a>
+        </li>
+
+        <!-- Take Attendance -->
+        <li class="nav-item">
+          {% url 'staff_take_attendance' as staff_take_attendance %}
+          <a href="{{ staff_take_attendance }}" class="nav-link {% if request.path == staff_take_attendance %} active {% endif %}">
+            <i class="nav-icon fas fa-clipboard-list"></i>
+            <p>Take Attendance</p>
+          </a>
+        </li>
+
+        <!-- Update Attendance -->
+        <li class="nav-item">
+          {% url 'staff_update_attendance' as staff_update_attendance %}
+          <a href="{{ staff_update_attendance }}" class="nav-link {% if request.path == staff_update_attendance %} active {% endif %}">
+            <i class="nav-icon fas fa-edit"></i>
+            <p>View Update Attendance</p>
+          </a>
+        </li>
+
+        <!-- Apply for Leave -->
+        <li class="nav-item">
+          {% url 'staff_apply_leave' as staff_apply_leave %}
+          <a href="{{ staff_apply_leave }}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
+            <i class="nav-icon fas fa-plane-departure"></i>
+            <p>Apply Leave</p>
+          </a>
+        </li>
+
+        <!-- Feedback -->
+        <li class="nav-item">
+          {% url 'staff_feedback' as staff_feedback %}
+          <a href="{{ staff_feedback }}" class="nav-link {% if request.path == staff_feedback %} active {% endif %}">
+            <i class="nav-icon fas fa-comment-dots"></i>
+            <p>Feedback</p>
+          </a>
+        </li>
+
+        <!-- Add Results -->
+        <li class="nav-item">
+          {% url 'staff_add_result' as staff_add_result %}
+          <a href="{{ staff_add_result }}" class="nav-link {% if request.path == staff_add_result %} active {% endif %}">
+            <i class="nav-icon fas fa-plus-circle"></i>
+            <p>Add Result</p>
+          </a>
+        </li>
+
+        <!-- Edit Results -->
+        <li class="nav-item">
+          {% url 'edit_student_result' as edit_student_result %}
+          <a href="{{ edit_student_result }}" class="nav-link {% if request.path == edit_student_result %} active {% endif %}">
+            <i class="nav-icon fas fa-pen-square"></i>
+            <p>Edit Result</p>
+          </a>
+        </li>
+
+        <!-- Live Classrooms -->
+        <li class="nav-item">
+          {% url 'start_live_classroom' as start_live_classroom %}
+          <a href="{{ start_live_classroom }}" class="nav-link {% if request.path == start_live_classroom %} active {% endif %}">
+            <i class="nav-icon fas fa-video"></i>
+            <p>Start Live Class Room</p>
+          </a>
+        </li>
+
+        <!-- Notifications -->
+        <li class="nav-item">
+          {% url 'staff_all_notification' as staff_all_notification %}
+          <a href="{{ staff_all_notification }}" class="nav-link {% if request.path == staff_all_notification %} active {% endif %}">
+            <i class="nav-icon fas fa-bell"></i>
+            <p>Notifications</p>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</aside>

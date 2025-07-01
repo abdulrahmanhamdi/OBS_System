@@ -1,0 +1,17 @@
+{% extends 'student_template/base_template.html' %}
+
+{% block page_title %}Subject Resources{% endblock page_title %}
+
+{% block main_content %}
+<h3>Available Resources</h3>
+<ul>
+  {% for resource in resources %}
+  <li>
+    {{ resource.subject.subject_name }} - {{ resource.title }} -
+    <a href="{{ resource.file.url }}" download>Download</a>
+  </li>
+  {% empty %}
+  <li>No resources available.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

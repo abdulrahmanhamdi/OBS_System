@@ -1,0 +1,121 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Add Course
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add Course</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form role="form" action="/add_subject_save" method="post">
+                  {% csrf_token %}
+                <div class="card-body">
+                  
+                  <div class="form-group">
+                    <label>Course Number</label>
+                    <input type="number" class="form-control" name="subject_id" placeholder="Enter Course Number">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Course Title</label>
+                    <input type="text" class="form-control" name="subject_name" placeholder="Enter Course Title">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Course Code Department (Prefix)</label>
+                    <input type="text" class="form-control" name="subject_code_dep" placeholder="Enter Course Code Department (Example: BLG)">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Course Type</label>
+                    <input type="text" class="form-control" name="subject_description" placeholder="Enter Course Type">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Credit Hours</label>
+                    <input type="number" class="form-control" name="credit_hours" placeholder="Enter Credit Hours">
+                  </div>
+
+                  <div class="form-group">
+                    <label>ECTS Credits</label>
+                    <input type="number" class="form-control" name="ects_credits" step="0.1" value="">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Semester</label>
+                    <input type="number" class="form-control" name="semester" placeholder="Enter Semester (e.g. 1, 2, 3...)">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Faculty</label>
+                    <select class="form-control" name="course">
+                        {% for course in courses %}
+                          <option value="{{ course.id }}">{{ course.course_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Acadimician</label>
+                    <select class="form-control" name="staff">
+                        {% for staff in staffs %}
+                        <option value="{{ staff.admin.id }}">{{ staff.academic_title }} {{ staff.admin.first_name }} {{ staff.admin.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Compulsory/Elective</label>
+                    <select class="form-control" name="subject_type">
+                      <option value="Compulsory">Compulsory</option>
+                      <option value="Elective">Elective</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Has Theory</label><br>
+                    <input type="checkbox" name="has_theory"> Yes
+                  </div>
+
+                  <div class="form-group">
+                    <label>Has Lab</label><br>
+                    <input type="checkbox" name="has_lab"> Yes
+                  </div>
+
+                  <div class="form-group">
+                      {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                  </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary btn-block">Add Lesson</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
+
+          </div>
+          </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}

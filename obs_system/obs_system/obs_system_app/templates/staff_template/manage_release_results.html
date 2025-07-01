@@ -1,0 +1,52 @@
+{% extends 'staff_template/base_template.html' %}
+
+{% block page_title %}
+Manage Release Results
+{% endblock page_title %}
+
+{% block main_content %}
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">Pending Results to Release</h3>
+      </div>
+
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap table-bordered">
+          <thead class="text-center bg-dark text-white">
+            <tr>
+              <th>Student ID</th>
+              <th>Student Name</th>
+              <th>Subject Code</th>
+              <th>Subject Name</th>
+              <th>Final Grade</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            {% for result in results %}
+            <tr>
+              <td>{{ result.student_id.admin.id }}</td>
+              <td>{{ result.student_id.admin.first_name }} {{ result.student_id.admin.last_name }}</td>
+              <td>{{ result.subject_id.subject_code_dep }}{{ result.subject_id.id }}</td>
+              <td>{{ result.subject_id.subject_name }}</td>
+              <td>{{ result.final_grade }}</td>
+              <td>
+                <a href="{% url 'release_result' result.id %}" class="btn btn-success btn-sm">Release</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center">No pending results to release.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock main_content %}

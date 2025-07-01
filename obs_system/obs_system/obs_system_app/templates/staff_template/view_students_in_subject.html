@@ -1,0 +1,40 @@
+{% extends 'staff_template/base_template.html' %}
+
+{% block page_title %}
+Students in {{ subject.subject_name }}
+{% endblock page_title %}
+
+{% block main_content %}
+<section class="content">
+  <div class="container-fluid">
+    <h3 class="mb-3">Students enrolled in {{ subject.subject_name }}</h3>
+    <div class="card">
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student Name</th>
+              <th>Email</th>
+              <th>Gender</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in students %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ student.admin.first_name }} {{ student.admin.last_name }}</td>
+              <td>{{ student.admin.email }}</td>
+              <td>{{ student.gender }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if students|length == 0 %}
+          <p class="text-center mt-3">No students enrolled in this subject.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock main_content %}

@@ -1,0 +1,31 @@
+{% extends 'staff_template/base_template.html' %}
+
+{% block page_title %}Upload Subject Resource{% endblock page_title %}
+
+{% block main_content %}
+<h3>Upload Resource</h3>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="subject" class="form-label">Select Subject</label>
+    <select id="subject" name="subject" class="form-select" required>
+      <option value="" selected disabled>Select Subject</option>
+      {% for subject in subjects %}
+      <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="title" class="form-label">Resource Title</label>
+    <input type="text" id="title" name="title" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="file" class="form-label">Upload File</label>
+    <input type="file" id="file" name="file" class="form-control" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+{% endblock %}

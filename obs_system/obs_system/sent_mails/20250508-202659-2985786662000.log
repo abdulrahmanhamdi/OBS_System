@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on 127.0.0.1:8000
+From: webmaster@localhost
+To: abdulrahman@gmail.com
+Date: Thu, 08 May 2025 17:26:59 -0000
+Message-ID: <174672521982.6440.10184269993247592451@ABDULRAHMAN>
+
+
+You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8000.
+
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8000/accounts/reset/MQ/cpi3gz-ac8d8e50ec41090eea722ff14ab5c7f4/
+
+Your username, in case you’ve forgotten: abdulrahman98
+
+Thanks for using our site!
+
+The 127.0.0.1:8000 team
+
+
+
+-------------------------------------------------------------------------------

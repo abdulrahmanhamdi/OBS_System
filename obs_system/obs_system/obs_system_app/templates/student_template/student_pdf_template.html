@@ -1,0 +1,48 @@
+{% extends 'student_template/base_template.html' %}
+
+{% block page_title %}
+GPA Detailed Summary
+{% endblock page_title %}
+
+{% block main_content %}
+<div class="container mt-4">
+
+  <h2 class="mb-4 text-center">Detailed GPA Summary</h2>
+
+  <!-- Cumulative GPA -->
+  <div class="mb-4 text-center">
+    <h4>Cumulative GPA: <strong>{{ cumulative_gpa }}</strong></h4>
+  </div>
+
+  <!-- GPA by Semester Table -->
+  <table class="table table-bordered table-striped table-hover text-center">
+    <thead class="thead-dark">
+      <tr>
+        <th>Semester Name</th>
+        <th>Number of Courses</th>
+        <th>Total Credit Hours</th>
+        <th>Total ECTS</th>
+        <th>Semester GPA</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sem in semester_gpas %}
+      <tr>
+        <td>{{ sem.semester_name }}</td>
+        <td>{{ sem.course_count }}</td>
+        <td>{{ sem.total_credits }}</td>
+        <td>{{ sem.total_ects }}</td>
+        <td>{{ sem.gpa }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">No semester data available.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="mt-4 text-center">
+    <a href="{% url 'student_view_result' %}" class="btn btn-outline-primary">Back to Results Page</a>
+  </div>
+
+</div>
+{% endblock main_content %}

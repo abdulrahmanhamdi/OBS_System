@@ -1,0 +1,35 @@
+{% extends 'staff_template/base_template.html' %}
+
+{% block page_title %}
+Edit Component Results for {{ student_result.student_id.admin.first_name }} {{ student_result.student_id.admin.last_name }}
+{% endblock page_title %}
+
+{% block main_content %}
+<section class="content">
+  <div class="container-fluid">
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="card card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Edit Component Scores</h3>
+        </div>
+
+        <div class="card-body">
+          {% for component in components %}
+            <div class="form-group">
+              <label>{{ component.grade_component.name }} (Weight: {{ component.grade_component.weight }}%)</label>
+              <input type="number" class="form-control" name="component_{{ component.id }}" value="{{ component.score }}" step="0.1" min="0" max="100" required>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="card-footer">
+          <button type="submit" class="btn btn-success btn-block">Save Changes</button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</section>
+{% endblock main_content %}

@@ -1,0 +1,151 @@
+{% extends 'staff_template/base_template.html' %}
+{% load custom_filters %}
+
+{% block page_title %}
+Final Results for {{ subject.subject_name }}
+{% endblock page_title %}
+
+{% block main_content %}
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="mb-3">
+        <a href="{% url 'export_final_results_pdf' subject.id %}" class="btn btn-danger">
+              Download PDF
+        </a>
+        <a href="{% url 'export_final_results_excel' subject.id %}" class="btn btn-success">
+              Download Excel
+        </a>
+        <button onclick="window.print()" class="btn btn-primary">
+             Print This Page
+        </button>
+    </div>
+
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">Students and Final Grades</h3>
+      </div>
+
+      <div class="card-body table-responsive p-0">
+        <table id="finalResultsTable" class="table table-bordered text-nowrap table-hover">
+          <thead class="text-center bg-dark text-white">
+            <tr>
+              <th>Student ID</th>
+              <th>Student Name</th>
+
+              {% for component in components %}
+                <th>{{ component.name }} ({{ component.weight|floatformat:2 }}%)</th>
+              {% endfor %}
+
+              <th>Final Grade</th>
+              <th>Grade Letter</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody class="text-center">
+            {% for result in results %}
+            <tr>
+              <td>{{ result.student_id.admin.id }}</td>
+              <td>{{ result.student_id.admin.first_name }} {{ result.student_id.admin.last_name }}</td>
+
+              {% for component in components %}
+                <td>
+                  {% with score=result.studentcomponentresult_set.all|get_component_score:component.name %}
+                    {% if score is not None %}
+                      {{ score|floatformat:2 }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  {% endwith %}
+                </td>
+              {% endfor %}
+
+              <td>{{ result.final_grade|floatformat:2 }}</td>
+              <td>{{ result.grade_letter|default:result.temp_grade_letter }}</td>
+
+              <td>
+                {% if result.is_released %}
+                  <span class="badge badge-success">Released</span>
+                {% else %}
+                  <span class="badge badge-warning">Pending</span>
+                {% endif %}
+              </td>
+
+              <td>
+                {% if not result.is_released %}
+                  <a href="{% url 'edit_student_component_results' result.id %}" class="btn btn-warning btn-sm">Edit</a>
+                {% else %}
+                  <span class="badge badge-secondary">Locked</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No results available.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-footer">
+        {% if results %}
+          <a href="{% url 'release_final_results_for_subject' subject.id %}" class="btn btn-success btn-block">
+            Release All Final Grades
+          </a>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- DataTables Initialization -->
+<script>
+  $(document).ready(function() {
+    $('#finalResultsTable').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+          { extend: 'copy', text: '📋 Copy' },
+          { extend: 'csv', text: '📄 CSV' },
+          { extend: 'excel', text: '📊 Excel' },
+          { extend: 'pdf', text: '📄 PDF' },
+          { extend: 'print', text: '🖨️ Print Table' }
+      ],
+      "pageLength": 10,
+      "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+      "order": [[ 0, "asc" ]],
+      "language": {
+        "search": "🔍 Search:",
+        "lengthMenu": "Display _MENU_ students per page",
+        "zeroRecords": "No matching students found",
+        "info": "Showing page _PAGE_ of _PAGES_",
+        "infoEmpty": "No students available",
+        "infoFiltered": "(filtered from _MAX_ total students)"
+      }
+    });
+  });
+</script>
+
+{% endblock main_content %}
